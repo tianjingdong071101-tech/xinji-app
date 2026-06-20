@@ -20,7 +20,7 @@ class MoodPicker extends StatelessWidget {
         Text('此刻的心情', style: Theme.of(context).textTheme.labelSmall),
         const SizedBox(height: 12),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: MoodType.values.map((mood) {
             final isSelected = mood == selectedMood;
             return GestureDetector(
@@ -28,8 +28,8 @@ class MoodPicker extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.elasticOut,
-                width: isSelected ? 60 : 50,
-                height: isSelected ? 60 : 50,
+                width: isSelected ? 52 : 44,
+                height: isSelected ? 52 : 44,
                 decoration: BoxDecoration(
                   color: isSelected
                       ? _moodColor(mood).withValues(alpha: 0.2)

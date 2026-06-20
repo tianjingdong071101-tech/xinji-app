@@ -29,10 +29,12 @@ class EmotionRiver extends StatelessWidget {
       child: Center(
         child: todayMood != null
             ? Text(todayMood!.emoji, style: const TextStyle(fontSize: 36))
-            : Text(
-                '今天的心情是？',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
+            : FittedBox(
+                child: Text(
+                  '今天的心情是？',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ),
       ),

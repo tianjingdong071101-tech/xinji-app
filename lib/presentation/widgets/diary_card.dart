@@ -32,9 +32,12 @@ class DiaryCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    '${DateUtil.formatDay(entry.createdAt)} ${DateUtil.weekday(entry.createdAt)}',
-                    style: Theme.of(context).textTheme.labelSmall,
+                  Flexible(
+                    child: Text(
+                      '${DateUtil.formatDay(entry.createdAt)} ${DateUtil.weekday(entry.createdAt)}',
+                      style: Theme.of(context).textTheme.labelSmall,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   const Spacer(),
                   Text(
