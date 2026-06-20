@@ -23,7 +23,7 @@ class InsightsScreen extends ConsumerWidget {
               children: [
                 const SizedBox(height: 16),
                 Text('洞察', style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: AppColors.neonCyan,
+                  color: AppColors.accentCyan,
                 )),
                 const SizedBox(height: 24),
                 Row(
@@ -96,7 +96,7 @@ class InsightsScreen extends ConsumerWidget {
               ],
             ),
           ),
-          loading: () => const Center(child: CircularProgressIndicator(color: AppColors.neonCyan)),
+          loading: () => const Center(child: CircularProgressIndicator(color: AppColors.accentCyan)),
           error: (_, __) => const Center(child: Text('加载失败')),
         ),
       ),

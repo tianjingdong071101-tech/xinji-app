@@ -82,11 +82,11 @@ class DiaryDetailScreen extends ConsumerWidget {
                     return Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.neonCyan.withValues(alpha: 0.1),
+                        color: AppColors.accentCyan.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.neonCyan.withValues(alpha: 0.2)),
+                        border: Border.all(color: AppColors.accentCyan.withValues(alpha: 0.2)),
                       ),
-                      child: Text(tag, style: const TextStyle(fontSize: 12, color: AppColors.neonCyan)),
+                      child: Text(tag, style: const TextStyle(fontSize: 12, color: AppColors.accentCyan)),
                     );
                   }).toList(),
                 ),

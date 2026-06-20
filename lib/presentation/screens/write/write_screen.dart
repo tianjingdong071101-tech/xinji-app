@@ -39,7 +39,7 @@ class WriteScreen extends ConsumerWidget {
               child: Text('保存', style: TextStyle(
                 color: state.mood == null || state.content.isEmpty
                     ? AppColors.textSoft
-                    : AppColors.neonCyan,
+                    : AppColors.accentCyan,
               )),
             ),
           ],
@@ -99,13 +99,13 @@ class WriteScreen extends ConsumerWidget {
                           ...state.tags.map((tag) => Chip(
                             label: Text(tag, style: const TextStyle(fontSize: 12, color: AppColors.textWhite)),
                             onDeleted: () => ref.read(writeDiaryProvider.notifier).removeTag(tag),
-                            deleteIconColor: AppColors.neonCyan,
-                            backgroundColor: AppColors.neonCyan.withValues(alpha: 0.15),
+                            deleteIconColor: AppColors.accentCyan,
+                            backgroundColor: AppColors.accentCyan.withValues(alpha: 0.15),
                           )),
                           ActionChip(
-                            label: const Text('+ 添加', style: TextStyle(fontSize: 12, color: AppColors.neonCyan)),
+                            label: const Text('+ 添加', style: TextStyle(fontSize: 12, color: AppColors.accentCyan)),
                             onPressed: () => _showTagDialog(context, ref),
-                            backgroundColor: AppColors.neonCyan.withValues(alpha: 0.08),
+                            backgroundColor: AppColors.accentCyan.withValues(alpha: 0.08),
                           ),
                         ],
                       ),
@@ -148,7 +148,7 @@ class WriteScreen extends ConsumerWidget {
               }
               Navigator.of(ctx).pop();
             },
-            child: const Text('添加', style: TextStyle(color: AppColors.neonCyan)),
+            child: const Text('添加', style: TextStyle(color: AppColors.accentCyan)),
           ),
         ],
       ),

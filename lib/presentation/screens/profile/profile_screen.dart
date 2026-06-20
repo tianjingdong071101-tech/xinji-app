@@ -17,7 +17,7 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               const SizedBox(height: 16),
               Text('我的', style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                color: AppColors.neonCyan,
+                color: AppColors.accentCyan,
               )),
               const SizedBox(height: 24),
               Card(
@@ -63,7 +63,7 @@ class _MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.neonCyan),
+      leading: Icon(icon, color: AppColors.accentCyan),
       title: Text(label, style: Theme.of(context).textTheme.bodyLarge),
       trailing: const Icon(Icons.chevron_right, color: AppColors.textSoft),
       onTap: onTap,
