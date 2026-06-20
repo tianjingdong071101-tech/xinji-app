@@ -23,36 +23,41 @@ class MoodPicker extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: MoodType.values.map((mood) {
             final isSelected = mood == selectedMood;
+            final moodColor = _moodColor(mood);
             return GestureDetector(
               onTap: () => onMoodSelected(mood),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.elasticOut,
-                width: isSelected ? 56 : 44,
-                height: isSelected ? 56 : 44,
+                width: isSelected ? 58 : 46,
+                height: isSelected ? 58 : 46,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? _moodColor(mood).withValues(alpha: 0.15)
-                      : Colors.transparent,
-                  borderRadius: BorderRadius.circular(isSelected ? 16 : 12),
+                  color: isSelected ? moodColor.withValues(alpha: 0.12) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(isSelected ? 18 : 14),
                   border: isSelected
-                      ? Border.all(color: _moodColor(mood).withValues(alpha: 0.6), width: 1.5)
+                      ? Border.all(color: moodColor.withValues(alpha: 0.5), width: 1.5)
                       : null,
                   boxShadow: isSelected
-                      ? [BoxShadow(
-                          color: _moodColor(mood).withValues(alpha: 0.3),
-                          blurRadius: 12,
-                          spreadRadius: 1,
-                        )]
+                      ? [BoxShadow(color: moodColor.withValues(alpha: 0.25), blurRadius: 14, spreadRadius: 2)]
                       : null,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(mood.emoji, style: TextStyle(fontSize: isSelected ? 26 : 20)),
+                    Text(
+                      mood.emoji,
+                      style: TextStyle(fontSize: isSelected ? 26 : 20),
+                    ),
                     if (isSelected)
-                      Text(mood.label,
-                        style: TextStyle(fontSize: 9, color: _moodColor(mood)),
+                      Text(
+                        mood.label,
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: moodColor,
+                          shadows: [
+                            Shadow(color: moodColor.withValues(alpha: 0.6), blurRadius: 8),
+                          ],
+                        ),
                       ),
                   ],
                 ),

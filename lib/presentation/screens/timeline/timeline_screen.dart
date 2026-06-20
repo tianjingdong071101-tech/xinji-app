@@ -21,13 +21,16 @@ class TimelineScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 4),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
-                  Text('心迹', style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: AppColors.neonCyan,
+                  Text('心迹', style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                    color: AppColors.textWhite,
+                    shadows: [
+                      Shadow(color: AppColors.accentCyan.withValues(alpha: 0.3), blurRadius: 20),
+                    ],
                   )),
                   const SizedBox(height: 4),
                   Text(
@@ -57,7 +60,7 @@ class TimelineScreen extends ConsumerWidget {
                           Text(
                             '点击下方按钮，记录今天的心情',
                             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: AppColors.textSoft.withValues(alpha: 0.7),
+                              color: AppColors.textLabel.withValues(alpha: 0.7),
                             ),
                           ),
                         ],
@@ -73,7 +76,7 @@ class TimelineScreen extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => const Center(child: CircularProgressIndicator(color: AppColors.neonCyan)),
+                loading: () => const Center(child: CircularProgressIndicator(color: AppColors.accentCyan)),
                 error: (_, __) => const Center(child: Text('加载失败')),
               ),
             ),

@@ -125,7 +125,7 @@ class WriteScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.backgroundDeep,
+        backgroundColor: AppColors.surfaceDeep,
         title: const Text('添加标签', style: TextStyle(color: AppColors.textWhite)),
         content: TextField(
           controller: controller,

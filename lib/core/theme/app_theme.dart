@@ -8,31 +8,34 @@ class XinjiTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.backgroundDark,
+      scaffoldBackgroundColor: AppColors.surfaceDark,
       colorScheme: const ColorScheme.dark(
-        primary: AppColors.neonCyan,
+        primary: AppColors.accentCyan,
         onPrimary: Colors.black,
-        secondary: AppColors.neonPurple,
-        surface: AppColors.backgroundDark,
+        secondary: AppColors.accentPurple,
+        surface: AppColors.surfaceDark,
         onSurface: AppColors.textWhite,
       ),
       cardTheme: CardThemeData(
-        color: AppColors.backgroundCard,
+        color: AppColors.surfaceCard,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.glassBorder, width: 0.5),
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: AppColors.surfaceBorder.withValues(alpha: 0.3)),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: AppColors.neonCyan,
+        backgroundColor: AppColors.accentCyan,
         foregroundColor: Colors.black,
-        elevation: 8,
+        elevation: 12,
         shape: const CircleBorder(),
       ),
       textTheme: const TextTheme(
+        displayLarge: TextStyle(
+          fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.textWhite, letterSpacing: -1,
+        ),
         headlineLarge: TextStyle(
-          fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.textWhite, letterSpacing: -0.5,
+          fontSize: 26, fontWeight: FontWeight.w700, color: AppColors.textWhite, letterSpacing: -0.5,
         ),
         headlineMedium: TextStyle(
           fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textWhite,
@@ -47,13 +50,13 @@ class XinjiTheme {
           fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textWhite,
         ),
         labelSmall: TextStyle(
-          fontSize: 12, color: AppColors.textSoft,
+          fontSize: 12, color: AppColors.textLabel,
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.backgroundDeep,
-        selectedItemColor: AppColors.neonCyan,
-        unselectedItemColor: AppColors.textSoft,
+        backgroundColor: Colors.transparent,
+        selectedItemColor: AppColors.accentCyan,
+        unselectedItemColor: AppColors.textLabel,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
       ),
@@ -61,15 +64,16 @@ class XinjiTheme {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
+        titleTextStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textWhite),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.backgroundCard,
+        fillColor: AppColors.surfaceCard,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.glassBorder),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: AppColors.surfaceBorder.withValues(alpha: 0.3)),
         ),
-        hintStyle: const TextStyle(color: AppColors.textSoft),
+        hintStyle: const TextStyle(color: AppColors.textLabel),
       ),
     );
   }

@@ -24,9 +24,9 @@ class ProfileScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     _MenuItem(icon: Icons.download_outlined, label: '导出数据', onTap: () {}),
-                    const Divider(height: 1, color: AppColors.glassBorder, indent: 56),
+                    const Divider(height: 1, color: AppColors.surfaceBorder, indent: 56),
                     _MenuItem(icon: Icons.notifications_outlined, label: '每日提醒', onTap: () {}),
-                    const Divider(height: 1, color: AppColors.glassBorder, indent: 56),
+                    const Divider(height: 1, color: AppColors.surfaceBorder, indent: 56),
                     _MenuItem(icon: Icons.info_outline, label: '关于心迹', onTap: () {}),
                   ],
                 ),

@@ -14,44 +14,55 @@ class EmotionRiver extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final activeMood = todayMood;
     return Container(
-      height: 96,
+      height: 100,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         gradient: LinearGradient(
           colors: recentMoods.isEmpty
-              ? [AppColors.neonPurple.withValues(alpha: 0.3), AppColors.neonCyan.withValues(alpha: 0.15)]
-              : recentMoods.map((m) => _moodColor(m).withValues(alpha: 0.35)).toList(),
+              ? [AppColors.accentPurple.withValues(alpha: 0.15), AppColors.accentCyan.withValues(alpha: 0.08)]
+              : recentMoods.map((m) => _moodColor(m).withValues(alpha: 0.2)).toList(),
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
-        border: Border.all(color: AppColors.glassBorder),
-        boxShadow: [
-          BoxShadow(
-            color: (todayMood != null ? _moodColor(todayMood!) : AppColors.neonCyan).withValues(alpha: 0.15),
-            blurRadius: 20,
-            spreadRadius: 2,
-          ),
-        ],
+        border: Border.all(color: AppColors.surfaceBorder),
+        boxShadow: activeMood != null
+            ? [
+                BoxShadow(
+                  color: _moodColor(activeMood).withValues(alpha: 0.12),
+                  blurRadius: 24,
+                  spreadRadius: 4,
+                ),
+              ]
+            : null,
       ),
       child: Center(
-        child: todayMood != null
+        child: activeMood != null
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(todayMood!.emoji, style: const TextStyle(fontSize: 32)),
-                  const SizedBox(width: 8),
-                  Text(todayMood!.label,
+                  Text(activeMood.emoji, style: const TextStyle(fontSize: 34)),
+                  const SizedBox(width: 10),
+                  Text(
+                    activeMood.label,
                     style: TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600,
-                      color: _moodColor(todayMood!),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: _moodColor(activeMood),
+                      shadows: [
+                        Shadow(
+                          color: _moodColor(activeMood).withValues(alpha: 0.5),
+                          blurRadius: 12,
+                        ),
+                      ],
                     ),
                   ),
                 ],
               )
             : const Text(
                 '今天的心情是？',
-                style: TextStyle(color: AppColors.textSoft, fontSize: 16),
+                style: TextStyle(color: AppColors.textLabel, fontSize: 16),
               ),
       ),
     );

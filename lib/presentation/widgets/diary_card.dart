@@ -19,7 +19,7 @@ class DiaryCard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.backgroundCard,
+            color: AppColors.surfaceCard,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: moodColor.withValues(alpha: 0.15), width: 0.5),
           ),
