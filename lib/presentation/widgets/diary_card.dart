@@ -30,56 +30,55 @@ class DiaryCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                        Container(
-                          width: 10, height: 10,
-                          decoration: BoxDecoration(
-                            color: moodColor,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(color: moodColor.withValues(alpha: 0.5), blurRadius: 6),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            '${DateUtil.formatDay(entry.createdAt)} ${DateUtil.weekday(entry.createdAt)}',
-                            style: Theme.of(context).textTheme.labelSmall,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const Spacer(),
-                        Text(
-                          '${entry.moodType.emoji} ${entry.moodType.label}',
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(color: moodColor),
-                        ),
-                      ],
-                    ),
-                    if (entry.title != null && entry.title!.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      Text(entry.title!, style: Theme.of(context).textTheme.headlineMedium),
-                    ],
-                    const SizedBox(height: 4),
-                    Text(
-                      entry.content,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    if (entry.tags.isNotEmpty) ...[
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 4,
-                        children: entry.tags.map((tag) => TagChip(label: tag, color: moodColor)).toList(),
+                    Container(
+                      width: 10, height: 10,
+                      decoration: BoxDecoration(
+                        color: moodColor,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: moodColor.withValues(alpha: 0.5), blurRadius: 6),
+                        ],
                       ),
-                    ],
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        '${DateUtil.formatDay(entry.createdAt)} ${DateUtil.weekday(entry.createdAt)}',
+                        style: Theme.of(context).textTheme.labelSmall,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${entry.moodType.emoji} ${entry.moodType.label}',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(color: moodColor),
+                    ),
                   ],
                 ),
-              ),
+                if (entry.title != null && entry.title!.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(entry.title!, style: Theme.of(context).textTheme.headlineMedium),
+                ],
+                const SizedBox(height: 4),
+                Text(
+                  entry.content,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (entry.tags.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 4,
+                    children: entry.tags.map((tag) => TagChip(label: tag, color: moodColor)).toList(),
+                  ),
+                ],
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 
   Color _moodColor(MoodType mood) {
