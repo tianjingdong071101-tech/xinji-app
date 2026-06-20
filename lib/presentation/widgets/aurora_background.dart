@@ -1,6 +1,5 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
+import '../../core/theme/app_colors.dart';
 
 class AuroraBackground extends StatelessWidget {
   final Widget child;
@@ -10,7 +9,7 @@ class AuroraBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -26,26 +25,17 @@ class AuroraBackground extends StatelessWidget {
           Positioned(
             top: -100,
             left: -50,
-            child: _GlowBall(
-              color: AppColors.neonPurple.withValues(alpha: 0.15),
-              size: 300,
-            ),
+            child: _GlowBall(color: AppColors.neonPurple, size: 300),
           ),
           Positioned(
             bottom: -80,
             right: -40,
-            child: _GlowBall(
-              color: AppColors.neonCyan.withValues(alpha: 0.1),
-              size: 250,
-            ),
+            child: _GlowBall(color: AppColors.neonCyan, size: 250),
           ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.4,
             right: -60,
-            child: _GlowBall(
-              color: AppColors.moodHappy.withValues(alpha: 0.08),
-              size: 200,
-            ),
+            child: _GlowBall(color: AppColors.moodHappy, size: 200),
           ),
           child,
         ],
@@ -68,7 +58,7 @@ class _GlowBall extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: RadialGradient(
-          colors: [color, color.withValues(alpha: 0)],
+          colors: [color.withValues(alpha: 0.12), color.withValues(alpha: 0)],
         ),
       ),
     );
