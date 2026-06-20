@@ -4,53 +4,72 @@ import 'app_colors.dart';
 class XinjiTheme {
   XinjiTheme._();
 
-  static ThemeData get light {
+  static ThemeData get dark {
     return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: AppColors.sand,
-      colorScheme: ColorScheme.light(
-        primary: AppColors.accentBrown,
-        onPrimary: AppColors.cardWhite,
-        secondary: AppColors.accentTerra,
-        surface: AppColors.cardWhite,
-        onSurface: AppColors.textPrimary,
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: AppColors.backgroundDark,
+      colorScheme: const ColorScheme.dark(
+        primary: AppColors.neonCyan,
+        onPrimary: Colors.black,
+        secondary: AppColors.neonPurple,
+        surface: AppColors.backgroundDark,
+        onSurface: AppColors.textWhite,
       ),
       cardTheme: CardThemeData(
-        color: AppColors.cardWhite,
-        elevation: 2,
+        color: AppColors.backgroundCard,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: AppColors.glassBorder, width: 0.5),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: AppColors.accentBrown,
-        foregroundColor: AppColors.cardWhite,
+        backgroundColor: AppColors.neonCyan,
+        foregroundColor: Colors.black,
+        elevation: 8,
         shape: const CircleBorder(),
       ),
       textTheme: const TextTheme(
         headlineLarge: TextStyle(
-          fontSize: 20, fontWeight: FontWeight.normal, color: AppColors.textPrimary,
+          fontSize: 22, fontWeight: FontWeight.w700, color: AppColors.textWhite, letterSpacing: -0.5,
         ),
         headlineMedium: TextStyle(
-          fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary,
+          fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textWhite,
         ),
         bodyLarge: TextStyle(
-          fontSize: 16, color: AppColors.textPrimary, height: 1.5,
+          fontSize: 16, color: AppColors.textWhite, height: 1.6,
         ),
         bodyMedium: TextStyle(
-          fontSize: 14, color: AppColors.textSecondary, height: 1.4,
+          fontSize: 14, color: AppColors.textSoft, height: 1.5,
         ),
         labelLarge: TextStyle(
-          fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary,
+          fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textWhite,
         ),
         labelSmall: TextStyle(
-          fontSize: 12, color: AppColors.textSecondary,
+          fontSize: 12, color: AppColors.textSoft,
         ),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.cardWhite,
-        selectedItemColor: AppColors.accentBrown,
-        unselectedItemColor: AppColors.textSecondary,
+        backgroundColor: AppColors.backgroundDeep,
+        selectedItemColor: AppColors.neonCyan,
+        unselectedItemColor: AppColors.textSoft,
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.backgroundCard,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.glassBorder),
+        ),
+        hintStyle: const TextStyle(color: AppColors.textSoft),
       ),
     );
   }

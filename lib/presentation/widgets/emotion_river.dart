@@ -15,27 +15,43 @@ class EmotionRiver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: 96,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
           colors: recentMoods.isEmpty
-              ? [AppColors.oat, AppColors.sand]
-              : recentMoods.map(_moodColor).toList(),
+              ? [AppColors.neonPurple.withValues(alpha: 0.3), AppColors.neonCyan.withValues(alpha: 0.15)]
+              : recentMoods.map((m) => _moodColor(m).withValues(alpha: 0.35)).toList(),
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),
+        border: Border.all(color: AppColors.glassBorder),
+        boxShadow: [
+          BoxShadow(
+            color: (todayMood != null ? _moodColor(todayMood!) : AppColors.neonCyan).withValues(alpha: 0.15),
+            blurRadius: 20,
+            spreadRadius: 2,
+          ),
+        ],
       ),
       child: Center(
         child: todayMood != null
-            ? Text(todayMood!.emoji, style: const TextStyle(fontSize: 36))
-            : FittedBox(
-                child: Text(
-                  '今天的心情是？',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(todayMood!.emoji, style: const TextStyle(fontSize: 32)),
+                  const SizedBox(width: 8),
+                  Text(todayMood!.label,
+                    style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w600,
+                      color: _moodColor(todayMood!),
+                    ),
                   ),
-                ),
+                ],
+              )
+            : const Text(
+                '今天的心情是？',
+                style: TextStyle(color: AppColors.textSoft, fontSize: 16),
               ),
       ),
     );

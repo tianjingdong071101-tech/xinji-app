@@ -6,6 +6,7 @@ import '../../../core/util/date_util.dart';
 import '../../providers/diary_providers.dart';
 import '../../widgets/diary_card.dart';
 import '../../widgets/emotion_river.dart';
+import '../../widgets/aurora_background.dart';
 
 class TimelineScreen extends ConsumerWidget {
   const TimelineScreen({super.key});
@@ -14,8 +15,8 @@ class TimelineScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final entriesAsync = ref.watch(diaryListProvider);
 
-    return Scaffold(
-      body: SafeArea(
+    return AuroraBackground(
+      child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -26,7 +27,7 @@ class TimelineScreen extends ConsumerWidget {
                 children: [
                   const SizedBox(height: 16),
                   Text('心迹', style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    color: AppColors.accentBrown,
+                    color: AppColors.neonCyan,
                   )),
                   const SizedBox(height: 4),
                   Text(
@@ -56,7 +57,7 @@ class TimelineScreen extends ConsumerWidget {
                           Text(
                             '点击下方按钮，记录今天的心情',
                             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: AppColors.textSecondary.withValues(alpha: 0.7),
+                              color: AppColors.textSoft.withValues(alpha: 0.7),
                             ),
                           ),
                         ],
@@ -72,7 +73,7 @@ class TimelineScreen extends ConsumerWidget {
                     ),
                   );
                 },
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator(color: AppColors.neonCyan)),
                 error: (_, __) => const Center(child: Text('加载失败')),
               ),
             ),

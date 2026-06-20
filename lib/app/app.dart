@@ -10,7 +10,7 @@ class XinjiApp extends StatelessWidget {
     return MaterialApp.router(
       title: '心迹',
       debugShowCheckedModeBanner: false,
-      theme: XinjiTheme.light,
+      theme: XinjiTheme.dark,
       routerConfig: routerProvider,
     );
   }

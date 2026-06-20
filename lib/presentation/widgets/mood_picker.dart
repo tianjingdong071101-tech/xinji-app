@@ -28,24 +28,31 @@ class MoodPicker extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.elasticOut,
-                width: isSelected ? 52 : 44,
-                height: isSelected ? 52 : 44,
+                width: isSelected ? 56 : 44,
+                height: isSelected ? 56 : 44,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? _moodColor(mood).withValues(alpha: 0.2)
+                      ? _moodColor(mood).withValues(alpha: 0.15)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(isSelected ? 16 : 12),
                   border: isSelected
-                      ? Border.all(color: _moodColor(mood), width: 2)
+                      ? Border.all(color: _moodColor(mood).withValues(alpha: 0.6), width: 1.5)
+                      : null,
+                  boxShadow: isSelected
+                      ? [BoxShadow(
+                          color: _moodColor(mood).withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          spreadRadius: 1,
+                        )]
                       : null,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(mood.emoji, style: TextStyle(fontSize: isSelected ? 28 : 22)),
+                    Text(mood.emoji, style: TextStyle(fontSize: isSelected ? 26 : 20)),
                     if (isSelected)
                       Text(mood.label,
-                        style: TextStyle(fontSize: 10, color: _moodColor(mood)),
+                        style: TextStyle(fontSize: 9, color: _moodColor(mood)),
                       ),
                   ],
                 ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../domain/model/mood_type.dart';
+import '../../widgets/aurora_background.dart';
 import 'insights_provider.dart';
 
 class InsightsScreen extends ConsumerWidget {
@@ -12,8 +13,8 @@ class InsightsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final insightsAsync = ref.watch(insightsProvider);
 
-    return Scaffold(
-      body: SafeArea(
+    return AuroraBackground(
+      child: SafeArea(
         child: insightsAsync.when(
           data: (state) => SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -22,7 +23,7 @@ class InsightsScreen extends ConsumerWidget {
               children: [
                 const SizedBox(height: 16),
                 Text('洞察', style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: AppColors.accentBrown,
+                  color: AppColors.neonCyan,
                 )),
                 const SizedBox(height: 24),
                 Row(
@@ -77,6 +78,7 @@ class InsightsScreen extends ConsumerWidget {
                                   decoration: BoxDecoration(
                                     color: _moodColor(mood),
                                     shape: BoxShape.circle,
+                                    boxShadow: [BoxShadow(color: _moodColor(mood).withValues(alpha: 0.5), blurRadius: 4)],
                                   ),
                                 ),
                                 const SizedBox(width: 4),
@@ -94,7 +96,7 @@ class InsightsScreen extends ConsumerWidget {
               ],
             ),
           ),
-          loading: () => const Center(child: CircularProgressIndicator()),
+          loading: () => const Center(child: CircularProgressIndicator(color: AppColors.neonCyan)),
           error: (_, __) => const Center(child: Text('加载失败')),
         ),
       ),
@@ -133,7 +135,7 @@ class _StatCard extends StatelessWidget {
           child: Column(
             children: [
               Text(value, style: TextStyle(
-                fontSize: 28, fontWeight: FontWeight.w600, color: color,
+                fontSize: 28, fontWeight: FontWeight.w700, color: color,
               )),
               const SizedBox(height: 4),
               Text(label, style: Theme.of(context).textTheme.labelSmall),
