@@ -6,6 +6,8 @@ build/
 *.mocks.dart
 .android/
 .ios/
+release/
+*.zip
 .idea/
 .vscode/
 *.iml
