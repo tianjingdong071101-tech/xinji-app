@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/model/mood_type.dart';
 import '../../domain/repository/mood_repository.dart';
@@ -19,9 +20,10 @@ class MoodRepositoryImpl implements MoodRepository {
   @override
   Future<List<MoodRecord>> getMoodRecords(DateTime start, DateTime end) async {
     final rows = await (_db.select(_db.moodRecords)
-      ..where((t) =>
-        t.date >= Value(start.millisecondsSinceEpoch) &
-        t.date < Value(end.millisecondsSinceEpoch)))
+      ..where((t) => t.date.isBetween(
+        Constant(start.millisecondsSinceEpoch),
+        Constant(end.millisecondsSinceEpoch),
+      )))
         .get();
     return rows.map((r) => MoodRecord(
       id: r.id,
@@ -37,9 +39,10 @@ class MoodRepositoryImpl implements MoodRepository {
     DateTime start, DateTime end,
   ) async {
     final rows = await (_db.select(_db.moodRecords)
-      ..where((t) =>
-        t.date >= Value(start.millisecondsSinceEpoch) &
-        t.date < Value(end.millisecondsSinceEpoch)))
+      ..where((t) => t.date.isBetween(
+        Constant(start.millisecondsSinceEpoch),
+        Constant(end.millisecondsSinceEpoch),
+      )))
         .get();
     final map = <MoodType, int>{};
     for (final mood in MoodType.values) {

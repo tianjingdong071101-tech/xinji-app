@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/model/diary_entry.dart';
@@ -38,9 +39,10 @@ class DiaryRepositoryImpl implements DiaryRepository {
     final start = DateTime(date.year, date.month, date.day);
     final end = start.add(const Duration(days: 1));
     final rows = await (_db.select(_db.diaryEntries)
-      ..where((t) =>
-        t.createdAt >= Value(start.millisecondsSinceEpoch) &
-        t.createdAt < Value(end.millisecondsSinceEpoch)))
+      ..where((t) => t.createdAt.isBetween(
+        Constant(start.millisecondsSinceEpoch),
+        Constant(end.millisecondsSinceEpoch),
+      )))
         .get();
     return rows.map(_toEntry).toList();
   }
