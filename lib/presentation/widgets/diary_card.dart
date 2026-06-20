@@ -79,8 +79,7 @@ class DiaryCard extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Color _moodColor(MoodType mood) {
