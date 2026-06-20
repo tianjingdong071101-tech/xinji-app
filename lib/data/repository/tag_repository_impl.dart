@@ -1,7 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:drift/drift.dart';
 import '../../domain/model/tag.dart';
 import '../../domain/repository/tag_repository.dart';
-import '../database/app_database.dart' hide Tag;
+import '../database/app_database.dart' as db;
 import '../database/tables.dart';
 
 part 'tag_repository_impl.g.dart';

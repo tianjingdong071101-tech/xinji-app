@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../../domain/model/diary_entry.dart';
 import '../../domain/model/mood_type.dart';
 import '../../domain/repository/diary_repository.dart';
-import '../database/app_database.dart' hide DiaryEntry;
+import '../database/app_database.dart' as db;
 import '../database/tables.dart';
 
 part 'diary_repository_impl.g.dart';
@@ -132,7 +132,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
     return streak;
   }
 
-  DiaryEntry _toEntry(DiaryEntryData row) {
+  DiaryEntry _toEntry(db.DiaryEntryData row) {
     return DiaryEntry(
       id: row.id,
       title: row.title,
