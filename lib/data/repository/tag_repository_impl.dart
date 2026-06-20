@@ -9,11 +9,11 @@ part 'tag_repository_impl.g.dart';
 
 @riverpod
 TagRepository tagRepository(TagRepositoryRef ref) {
-  return TagRepositoryImpl(ref.watch(appDatabaseProvider));
+  return TagRepositoryImpl(ref.watch(db.appDatabaseProvider));
 }
 
 class TagRepositoryImpl implements TagRepository {
-  final AppDatabase _db;
+  final db.AppDatabase _db;
 
   TagRepositoryImpl(this._db);
 
@@ -42,7 +42,7 @@ class TagRepositoryImpl implements TagRepository {
 
   @override
   Future<int> insertTag(Tag tag) async {
-    return await _db.into(_db.tags).insert(TagsCompanion(
+    return await _db.into(_db.tags).insert(db.TagsCompanion(
       name: Value(tag.name),
       color: Value(tag.color),
       createdAt: Value(tag.createdAt.millisecondsSinceEpoch),

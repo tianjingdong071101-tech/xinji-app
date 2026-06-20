@@ -12,11 +12,11 @@ part 'diary_repository_impl.g.dart';
 
 @riverpod
 DiaryRepository diaryRepository(DiaryRepositoryRef ref) {
-  return DiaryRepositoryImpl(ref.watch(appDatabaseProvider));
+  return DiaryRepositoryImpl(ref.watch(db.appDatabaseProvider));
 }
 
 class DiaryRepositoryImpl implements DiaryRepository {
-  final AppDatabase _db;
+  final db.AppDatabase _db;
 
   DiaryRepositoryImpl(this._db);
 
@@ -67,8 +67,8 @@ class DiaryRepositoryImpl implements DiaryRepository {
   @override
   Future<int> insertEntry(DiaryEntry entry) async {
     final uuid = const Uuid().v4().hashCode;
-    final id = await _db.into(_db.diaryEntries).insert(DiaryEntriesCompanion(
-      id: Value(entry.id > 0 ? entry.id : uuid.abs()),
+    final id = await _db.into(_db.diaryEntries).insert(db.DiaryEntriesCompanion(
+      id: Value<int>(entry.id > 0 ? entry.id : uuid.abs()),
       title: Value(entry.title),
       content: Value(entry.content),
       moodType: Value(entry.moodType.name),
@@ -86,7 +86,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
   Future<void> updateEntry(DiaryEntry entry) async {
     await (_db.update(_db.diaryEntries)
       ..where((t) => t.id.equals(entry.id)))
-        .write(DiaryEntriesCompanion(
+        .write(db.DiaryEntriesCompanion(
       title: Value(entry.title),
       content: Value(entry.content),
       moodType: Value(entry.moodType.name),
@@ -99,9 +99,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
 
   @override
   Future<void> deleteEntry(int id) async {
-    await (_db.delete(_db.diaryEntries)
-      ..where((t) => t.id.equals(id)))
-        .go();
+    await (_db.delete(_db.diaryEntries)..where((t) => t.id.equals(entry.id))).go();
   }
 
   @override
@@ -132,7 +130,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
     return streak;
   }
 
-  DiaryEntry _toEntry(db.DiaryEntryData row) {
+  DiaryEntry _toEntry(db.DiaryEntry row) {
     return DiaryEntry(
       id: row.id,
       title: row.title,

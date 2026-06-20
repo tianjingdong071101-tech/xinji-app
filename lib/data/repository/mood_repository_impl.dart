@@ -2,18 +2,18 @@ import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/model/mood_type.dart';
 import '../../domain/repository/mood_repository.dart';
-import '../database/app_database.dart' hide MoodRecord;
+import '../database/app_database.dart' as db;
 import '../database/tables.dart';
 
 part 'mood_repository_impl.g.dart';
 
 @riverpod
 MoodRepository moodRepository(MoodRepositoryRef ref) {
-  return MoodRepositoryImpl(ref.watch(appDatabaseProvider));
+  return MoodRepositoryImpl(ref.watch(db.appDatabaseProvider));
 }
 
 class MoodRepositoryImpl implements MoodRepository {
-  final AppDatabase _db;
+  final db.AppDatabase _db;
 
   MoodRepositoryImpl(this._db);
 
@@ -57,7 +57,7 @@ class MoodRepositoryImpl implements MoodRepository {
 
   @override
   Future<int> insertRecord(MoodRecord record) async {
-    return await _db.into(_db.moodRecords).insert(MoodRecordsCompanion(
+    return await _db.into(_db.moodRecords).insert(db.MoodRecordsCompanion(
       date: Value(record.date.millisecondsSinceEpoch),
       moodType: Value(record.moodType.name),
       entryId: Value(record.entryId),
