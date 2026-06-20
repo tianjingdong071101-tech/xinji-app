@@ -1,0 +1,13 @@
+.dart_tool/
+.pub/
+build/
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+.android/
+.ios/
+.idea/
+.vscode/
+*.iml
+.flutter-plugins
+.flutter-plugins-dependencies
