@@ -99,7 +99,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
 
   @override
   Future<void> deleteEntry(int id) async {
-    await (_db.delete(_db.diaryEntries)..where((t) => t.id.equals(entry.id))).go();
+    await (_db.delete(_db.diaryEntries)..where((t) => t.id.equals(id))).go();
   }
 
   @override
