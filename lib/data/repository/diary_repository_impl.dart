@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 import '../../domain/model/diary_entry.dart';
 import '../../domain/model/mood_type.dart';
 import '../../domain/repository/diary_repository.dart';
-import '../database/app_database.dart';
+import '../database/app_database.dart' hide DiaryEntry;
 import '../database/tables.dart';
 
 part 'diary_repository_impl.g.dart';
@@ -38,10 +38,9 @@ class DiaryRepositoryImpl implements DiaryRepository {
     final start = DateTime(date.year, date.month, date.day);
     final end = start.add(const Duration(days: 1));
     final rows = await (_db.select(_db.diaryEntries)
-      ..where((t) => t.createdAt.isBetweenValues(
-        start.millisecondsSinceEpoch,
-        end.millisecondsSinceEpoch,
-      )))
+      ..where((t) =>
+        t.createdAt >= Value(start.millisecondsSinceEpoch) &
+        t.createdAt < Value(end.millisecondsSinceEpoch)))
         .get();
     return rows.map(_toEntry).toList();
   }
