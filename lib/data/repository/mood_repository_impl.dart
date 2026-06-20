@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/model/mood_type.dart';
 import '../../domain/repository/mood_repository.dart';
 import '../database/app_database.dart' as db;
-import '../database/tables.dart';
 
 part 'mood_repository_impl.g.dart';
 

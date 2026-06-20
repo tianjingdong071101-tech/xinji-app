@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/util/date_util.dart';
-import '../../../domain/model/diary_entry.dart';
 import '../../providers/diary_providers.dart';
 import '../../widgets/diary_card.dart';
 import '../../widgets/emotion_river.dart';

@@ -6,7 +6,6 @@ import '../../domain/model/diary_entry.dart';
 import '../../domain/model/mood_type.dart';
 import '../../domain/repository/diary_repository.dart';
 import '../database/app_database.dart' as db;
-import '../database/tables.dart';
 
 part 'diary_repository_impl.g.dart';
 
@@ -59,7 +58,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
   Future<List<DiaryEntry>> searchEntries(String query) async {
     final pattern = '%$query%';
     final rows = await (_db.select(_db.diaryEntries)
-      ..where((t) => t.content.like(pattern) | (t.title?.like(pattern) ?? const Constant(false))))
+      ..where((t) => t.content.like(pattern) | t.title.like(pattern)))
         .get();
     return rows.map(_toEntry).toList();
   }
