@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../data/repository/todo_repository_impl.dart';
 import '../../../../domain/model/todo_item.dart';
-import '../../../../engine/reminder_engine.dart';
 
 class TodoBottomSheet extends ConsumerStatefulWidget {
   final DateTime date;
@@ -170,16 +169,6 @@ class _TodoBottomSheetState extends ConsumerState<TodoBottomSheet> {
                       : null,
                   createdAt: DateTime.now(),
                 ));
-                if (selectedTime != null) {
-                  ref.read(reminderEngineProvider).scheduleTodoReminder(
-                    TodoReminderData(
-                      todoId: titleCtl.text.hashCode,
-                      title: titleCtl.text.trim(),
-                      hour: selectedTime!.hour,
-                      minute: selectedTime!.minute,
-                    ),
-                  );
-                }
                 if (!ctx.mounted) return;
                 Navigator.of(ctx).pop();
                 _refresh();
@@ -328,18 +317,6 @@ class _TodoBottomSheetState extends ConsumerState<TodoBottomSheet> {
                       ? selectedTime!.hour * 60 + selectedTime!.minute
                       : null,
                 ));
-                if (selectedTime != null) {
-                  ref.read(reminderEngineProvider).scheduleTodoReminder(
-                    TodoReminderData(
-                      todoId: item.id,
-                      title: titleCtl.text.trim(),
-                      hour: selectedTime!.hour,
-                      minute: selectedTime!.minute,
-                    ),
-                  );
-                } else if (item.todoTimeMinutes != null) {
-                  ref.read(reminderEngineProvider).cancelTodoReminder(item.id);
-                }
                 if (!ctx.mounted) return;
                 Navigator.of(ctx).pop();
                 _refresh();

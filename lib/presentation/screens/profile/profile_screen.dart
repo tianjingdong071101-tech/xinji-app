@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../engine/export_engine.dart';
-import '../../../engine/reminder_engine.dart' as eng;
 import '../insights/widgets/todo_bottom_sheet.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -10,57 +9,18 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final engine = ref.watch(eng.reminderEngineProvider);
-    final reminderTime = engine.getReminderTimeString();
-    final hasReminder = engine.hasReminder;
-
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: Text('我的',
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayLarge
-                          ?.copyWith(color: AppColors.accent)),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: hasReminder
-                        ? AppColors.moodCalm.withValues(alpha: 0.1)
-                        : AppColors.card,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        hasReminder ? Icons.notifications_active : Icons.notifications_none,
-                        size: 12,
-                        color: hasReminder ? AppColors.moodCalm : AppColors.textMuted,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        hasReminder ? '提醒 $reminderTime' : '未设置提醒',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: hasReminder ? AppColors.moodCalm : AppColors.textMuted,
-                          fontWeight: FontWeight.w500,
-                          fontFamily: 'Epilogue',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+            const SizedBox(height: 32),
+            Text('我的',
+                style: Theme.of(context)
+                    .textTheme
+                    .displayLarge
+                    ?.copyWith(color: AppColors.accent)),
             const SizedBox(height: 24),
             Container(
               decoration: BoxDecoration(
@@ -88,13 +48,6 @@ class ProfileScreen extends ConsumerWidget {
                     icon: Icons.download_outlined,
                     label: '导出数据',
                     onTap: () => _showExportOptions(context, ref),
-                  ),
-                  _MenuDivider(),
-                  _ReminderItem(
-                    time: reminderTime,
-                    hasReminder: hasReminder,
-                    onSet: () => _setReminder(context, ref),
-                    onCancel: () => _cancelReminder(context, ref),
                   ),
                   _MenuDivider(),
                   _MenuItem(
@@ -171,65 +124,6 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  void _setReminder(BuildContext context, WidgetRef ref) async {
-    final engine = ref.read(eng.reminderEngineProvider);
-    final result = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 21, minute: 0),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.accent,
-              onPrimary: Colors.white,
-              surface: AppColors.card,
-              onSurface: AppColors.textPrimary,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (result != null) {
-      await engine.scheduleDaily(result.hour, result.minute);
-      if (context.mounted) {
-        _showSnackBar(
-          context,
-          '待办提醒已设置，将在 ${result.hour.toString().padLeft(2, '0')}:${result.minute.toString().padLeft(2, '0')} 提醒你',
-        );
-      }
-    }
-  }
-
-  void _cancelReminder(BuildContext context, WidgetRef ref) async {
-    final engine = ref.read(eng.reminderEngineProvider);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        backgroundColor: AppColors.card,
-        title: Text('取消提醒', style: TextStyle(color: AppColors.textPrimary)),
-        content: Text('确定要关闭待办提醒吗？', style: TextStyle(color: AppColors.textSecondary)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: Text('保留', style: TextStyle(color: AppColors.textMuted)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: Text('关闭', style: TextStyle(color: AppColors.moodAnxious)),
-          ),
-        ],
-      ),
-    );
-    if (confirmed == true) {
-      await engine.cancel();
-      if (context.mounted) {
-        _showSnackBar(context, '待办提醒已关闭');
-      }
-    }
-  }
-
   void _showSnackBar(BuildContext context, String msg) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -282,65 +176,6 @@ class _MenuItem extends StatelessWidget {
       title: Text(label, style: Theme.of(context).textTheme.bodyLarge),
       trailing: Icon(Icons.chevron_right, color: AppColors.textMuted),
       onTap: onTap,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-    );
-  }
-}
-
-class _ReminderItem extends StatelessWidget {
-  final String time;
-  final bool hasReminder;
-  final VoidCallback onSet;
-  final VoidCallback onCancel;
-
-  const _ReminderItem({
-    required this.time,
-    required this.hasReminder,
-    required this.onSet,
-    required this.onCancel,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        hasReminder ? Icons.notifications_active : Icons.notifications_outlined,
-        color: hasReminder ? AppColors.moodCalm : AppColors.accent,
-      ),
-      title: Text('待办提醒', style: Theme.of(context).textTheme.bodyLarge),
-      subtitle: Text(
-        hasReminder ? '每天 $time 提醒查看待办' : '设置后每天定时提醒你处理待办',
-        style: TextStyle(
-          fontSize: 11,
-          color: hasReminder ? AppColors.moodCalm : AppColors.textMuted,
-        ),
-      ),
-      trailing: hasReminder
-          ? GestureDetector(
-              onTap: onCancel,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.moodAnxious.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.close, size: 12, color: AppColors.moodAnxious),
-                    const SizedBox(width: 2),
-                    Text('关闭',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: AppColors.moodAnxious,
-                          fontWeight: FontWeight.w500,
-                        )),
-                  ],
-                ),
-              ),
-            )
-          : Icon(Icons.chevron_right, color: AppColors.textMuted),
-      onTap: hasReminder ? null : onSet,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
     );
   }
