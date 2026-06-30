@@ -195,7 +195,7 @@ class ProfileScreen extends ConsumerWidget {
       if (context.mounted) {
         _showSnackBar(
           context,
-          '每日提醒已设置，将在 ${result.hour.toString().padLeft(2, '0')}:${result.minute.toString().padLeft(2, '0')} 提醒你',
+          '待办提醒已设置，将在 ${result.hour.toString().padLeft(2, '0')}:${result.minute.toString().padLeft(2, '0')} 提醒你',
         );
       }
     }
@@ -209,7 +209,7 @@ class ProfileScreen extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         backgroundColor: AppColors.card,
         title: Text('取消提醒', style: TextStyle(color: AppColors.textPrimary)),
-        content: Text('确定要关闭每日提醒吗？', style: TextStyle(color: AppColors.textSecondary)),
+        content: Text('确定要关闭待办提醒吗？', style: TextStyle(color: AppColors.textSecondary)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
@@ -225,7 +225,7 @@ class ProfileScreen extends ConsumerWidget {
     if (confirmed == true) {
       await engine.cancel();
       if (context.mounted) {
-        _showSnackBar(context, '每日提醒已关闭');
+        _showSnackBar(context, '待办提醒已关闭');
       }
     }
   }
@@ -307,9 +307,9 @@ class _ReminderItem extends StatelessWidget {
         hasReminder ? Icons.notifications_active : Icons.notifications_outlined,
         color: hasReminder ? AppColors.moodCalm : AppColors.accent,
       ),
-      title: Text('每日提醒', style: Theme.of(context).textTheme.bodyLarge),
+      title: Text('待办提醒', style: Theme.of(context).textTheme.bodyLarge),
       subtitle: Text(
-        hasReminder ? '每天 $time 推送提醒' : '设置后每天定时提醒你记录心情',
+        hasReminder ? '每天 $time 提醒查看待办' : '设置后每天定时提醒你处理待办',
         style: TextStyle(
           fontSize: 11,
           color: hasReminder ? AppColors.moodCalm : AppColors.textMuted,

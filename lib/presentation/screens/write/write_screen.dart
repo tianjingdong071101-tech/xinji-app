@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../providers/essay_providers.dart';
 import '../../widgets/mood_picker.dart';
 import '../../widgets/audio_recorder.dart' as ar;
+import '../insights/insights_provider.dart';
 import 'write_provider.dart';
 
 class WriteScreen extends ConsumerWidget {
@@ -31,7 +32,10 @@ class WriteScreen extends ConsumerWidget {
             onPressed: canSave
                 ? () async {
                     final success = await ref.read(writeDiaryProvider.notifier).save();
-                    if (success) ref.invalidate(diaryListProvider);
+                    if (success) {
+                      ref.invalidate(diaryListProvider);
+                      ref.invalidate(insightsProvider);
+                    }
                     if (success && context.mounted) context.pop();
                   }
                 : null,

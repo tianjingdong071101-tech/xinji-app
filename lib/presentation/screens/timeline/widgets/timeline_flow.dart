@@ -4,6 +4,7 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../domain/model/essay_entry.dart';
 import '../../../../data/repository/essay_repository_impl.dart';
 import '../../../../presentation/providers/essay_providers.dart';
+import '../../../../presentation/screens/insights/insights_provider.dart';
 import '../../../widgets/essay_card.dart';
 
 class TimelineFlow extends ConsumerWidget {
@@ -102,6 +103,7 @@ class TimelineFlow extends ConsumerWidget {
             if (confirmed == true) {
               await ref.read(diaryRepositoryProvider).deleteEntry(entry.id);
               ref.invalidate(diaryListProvider);
+              ref.invalidate(insightsProvider);
               return true;
             }
             return false;

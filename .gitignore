@@ -13,3 +13,6 @@ release/
 *.iml
 .flutter-plugins
 .flutter-plugins-dependencies
+*.log
+android/.kotlin/
+android/local.properties

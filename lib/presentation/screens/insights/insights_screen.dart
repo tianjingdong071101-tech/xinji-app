@@ -109,7 +109,7 @@ class _InsightsScreenState extends ConsumerState<InsightsScreen> {
                               setState(() => _selectedTab = 0)),
                       const SizedBox(width: 8),
                       _TabButton(
-                          label: '月历',
+                          label: '日历',
                           selected: _selectedTab == 1,
                           onTap: () =>
                               setState(() => _selectedTab = 1)),

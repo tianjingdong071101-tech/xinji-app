@@ -39,12 +39,12 @@ class ReminderEngine {
     await _plugin.show(
       0,
       '心迹',
-      '该写随笔了，今天的心情怎么样？',
+      '你有待办事项待处理，记得查看并记录今天的心情',
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'daily_reminder',
-          '每日随笔提醒',
-          channelDescription: '每天提醒你记录心情和随笔',
+          '每日待办提醒',
+          channelDescription: '每天提醒你查看待办和记录心情',
           importance: Importance.defaultImportance,
           priority: Priority.defaultPriority,
         ),

@@ -64,32 +64,35 @@ class _MoodStarDetailState extends State<MoodStarDetail>
                 bottom: MediaQuery.of(context).viewInsets.bottom + 20,
               ),
               child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    _controller.reverse().then((_) => widget.onClose());
-                  },
-                  child: Container(
-                    width: 300,
-                    margin: const EdgeInsets.symmetric(horizontal: 40),
-                    decoration: BoxDecoration(
-                      color: AppColors.card,
-                      borderRadius: BorderRadius.circular(28),
-                      border: Border.all(
-                        color: mood.color.withValues(alpha: 0.3),
-                        width: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      _controller.reverse().then((_) {
+                        widget.onClose();
+                        if (context.mounted) Navigator.of(context).pop();
+                      });
+                    },
+                    child: Container(
+                      width: 300,
+                      margin: const EdgeInsets.symmetric(horizontal: 40),
+                      decoration: BoxDecoration(
+                        color: AppColors.card,
+                        borderRadius: BorderRadius.circular(28),
+                        border: Border.all(
+                          color: mood.color.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _buildHeader(mood),
+                          _buildBody(mood),
+                          _buildBar(mood),
+                          _buildFooter(mood),
+                        ],
                       ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _buildHeader(mood),
-                        _buildBody(mood),
-                        _buildBar(mood),
-                        _buildFooter(mood),
-                      ],
-                    ),
                   ),
-                ),
               ),
             ),
           ),
@@ -150,7 +153,10 @@ class _MoodStarDetailState extends State<MoodStarDetail>
           ),
           GestureDetector(
             onTap: () {
-              _controller.reverse().then((_) => widget.onClose());
+              _controller.reverse().then((_) {
+                widget.onClose();
+                if (context.mounted) Navigator.of(context).pop();
+              });
             },
             child: Container(
               width: 32,
