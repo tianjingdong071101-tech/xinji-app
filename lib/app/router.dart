@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../core/theme/app_colors.dart';
 import '../presentation/screens/timeline/timeline_screen.dart';
 import '../presentation/screens/write/write_screen.dart';
 import '../presentation/screens/insights/insights_screen.dart';
 import '../presentation/screens/profile/profile_screen.dart';
-import '../presentation/screens/detail/diary_detail_screen.dart';
-import '../domain/model/diary_entry.dart';
+import '../presentation/screens/detail/essay_detail_screen.dart';
+import '../presentation/screens/story/story_mode_screen.dart';
+import '../presentation/screens/search/search_screen.dart';
+import '../domain/model/essay_entry.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -39,16 +42,34 @@ final routerProvider = GoRouter(
       ],
     ),
     GoRoute(
+      path: '/search',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const SearchScreen(),
+    ),
+    GoRoute(
       path: '/write',
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const WriteScreen(),
     ),
     GoRoute(
-      path: '/diary/:id',
+      path: '/essay/:id',
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) {
-        final entry = state.extra as DiaryEntry;
+        final entry = state.extra;
+        if (entry is! DiaryEntry) return const SizedBox.shrink();
         return DiaryDetailScreen(entry: entry);
+      },
+    ),
+    GoRoute(
+      path: '/story/:id',
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) {
+        final extra = state.extra;
+        if (extra is! Map<String, dynamic>) return const SizedBox.shrink();
+        final entry = extra['entry'];
+        final allEntries = extra['allEntries'];
+        if (entry is! DiaryEntry || allEntries is! List<DiaryEntry>) return const SizedBox.shrink();
+        return StoryModeScreen(entry: entry, allEntries: allEntries);
       },
     ),
   ],
@@ -62,22 +83,27 @@ class MainShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: AppColors.surface,
       body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex(context),
-        onTap: (i) {
-          switch (i) {
-            case 0: context.go('/timeline');
-            case 1: context.go('/insights');
-            case 2: context.go('/profile');
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.timeline), label: '时间线'),
-          BottomNavigationBarItem(icon: Icon(Icons.insights), label: '洞察'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '我的'),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.borderLight, width: 0.5)),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex(context),
+          onTap: (i) {
+            switch (i) {
+              case 0: context.go('/timeline');
+              case 1: context.go('/insights');
+              case 2: context.go('/profile');
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.timeline), label: '时间线'),
+            BottomNavigationBarItem(icon: Icon(Icons.insights), label: '洞察'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: '我的'),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push('/write'),

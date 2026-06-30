@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../data/repository/diary_repository_impl.dart';
-import '../../domain/model/diary_entry.dart';
+import '../../data/repository/essay_repository_impl.dart';
+import '../../domain/model/essay_entry.dart';
 
-part 'diary_providers.g.dart';
+part 'essay_providers.g.dart';
 
 @riverpod
 class DiaryList extends _$DiaryList {

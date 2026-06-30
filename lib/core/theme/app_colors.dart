@@ -3,27 +3,23 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Surface — dark saturated gradient per Aurora anchor
-  static const Color surfaceDark = Color(0xFF0A0418);
-  static const Color surfaceDeep = Color(0xFF1A0A30);
-  static const Color surfaceMid = Color(0xFF150824);
-  static const Color surfaceCard = Color(0x12FFFFFF);
-  static const Color surfaceBorder = Color(0x20FFFFFF);
+  static const Color surface = Color(0xFFE8DCC7);
+  static const Color card = Color(0xFFD4B895);
+  static const Color cardLight = Color(0xFFDDC9AE);
 
-  // Text
-  static const Color textWhite = Color(0xFFFFFFFF);
-  static const Color textSoft = Color(0xFFB0A0C8);
-  static const Color textLabel = Color(0xFF7B6F99);
+  static const Color textPrimary = Color(0xFF2C1810);
+  static const Color textSecondary = Color(0xFF6B5B4E);
+  static const Color textMuted = Color(0xFF9A8A7D);
 
-  // Accent
-  static const Color accentCyan = Color(0xFF00F0FF);
-  static const Color accentPurple = Color(0xFFA855F7);
+  static const Color accent = Color(0xFFC66B3D);
+  static const Color accentLight = Color(0xFFE8C4B0);
 
-  // Mood — each mood is an aurora color with neon quality
-  static const Color moodHappy = Color(0xFFFFD700);
-  static const Color moodCalm = Color(0xFF00F0FF);
-  static const Color moodLonging = Color(0xFF667EEA);
-  static const Color moodSad = Color(0xFFA855F7);
-  static const Color moodAnxious = Color(0xFFFF3366);
-  static const Color moodHopeful = Color(0xFF34D399);
+  static const Color borderLight = Color(0xFFD0C4B6);
+
+  static const Color sage = Color(0xFF8B9D83);
+
+  static const Color moodHappy = Color(0xFFC08E3A);
+  static const Color moodCalm = Color(0xFF8B9D83);
+  static const Color moodLonging = Color(0xFFA0867A);
+  static const Color moodAnxious = Color(0xFFC66B3D);
 }

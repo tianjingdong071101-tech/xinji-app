@@ -1,13 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:xinji_app/domain/model/diary_entry.dart';
+import 'package:xinji_app/domain/model/essay_entry.dart';
 import 'package:xinji_app/domain/model/mood_type.dart';
-import 'package:xinji_app/domain/repository/diary_repository.dart';
+import 'package:xinji_app/domain/repository/essay_repository.dart';
 
 class MockDiaryRepository implements DiaryRepository {
   final List<DiaryEntry> _entries = [];
 
   @override
-  Future<List<DiaryEntry>> getAllEntries() async => _entries;
+  Future<List<DiaryEntry>> getAllEntries({int? limit, int? offset}) async {
+    var list = _entries;
+    if (offset != null) list = list.skip(offset).toList();
+    if (limit != null) list = list.take(limit).toList();
+    return list;
+  }
 
   @override
   Future<DiaryEntry?> getEntryById(int id) async =>
@@ -17,11 +22,14 @@ class MockDiaryRepository implements DiaryRepository {
   Future<List<DiaryEntry>> getEntriesByDate(DateTime date) async => _entries;
 
   @override
+  Future<List<DiaryEntry>> getEntriesByDateRange(DateTime start, DateTime end) async => _entries;
+
+  @override
   Future<List<DiaryEntry>> getEntriesByMood(MoodType mood) async =>
       _entries.where((e) => e.moodType == mood).toList();
 
   @override
-  Future<List<DiaryEntry>> searchEntries(String query) async =>
+  Future<List<DiaryEntry>> searchEntries(String query, {int? limit}) async =>
       _entries.where((e) => e.content.contains(query)).toList();
 
   @override
@@ -53,7 +61,7 @@ void main() {
 
       await repo.insertEntry(DiaryEntry(
         id: 1,
-        content: '测试日记',
+        content: '测试随笔',
         moodType: MoodType.happy,
         createdAt: now,
         updatedAt: now,
@@ -61,7 +69,7 @@ void main() {
 
       final entries = await repo.getAllEntries();
       expect(entries.length, 1);
-      expect(entries.first.content, '测试日记');
+      expect(entries.first.content, '测试随笔');
     });
 
     test('should search entries by content', () async {

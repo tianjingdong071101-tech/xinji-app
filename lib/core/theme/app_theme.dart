@@ -1,79 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class XinjiTheme {
   XinjiTheme._();
 
-  static ThemeData get dark {
+  static ThemeData get light {
+    final fraunces = GoogleFonts.fraunces();
+    final epilogue = GoogleFonts.epilogue();
+
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.surfaceDark,
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.accentCyan,
-        onPrimary: Colors.black,
-        secondary: AppColors.accentPurple,
-        surface: AppColors.surfaceDark,
-        onSurface: AppColors.textWhite,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: AppColors.surface,
+      colorScheme: ColorScheme.light(
+        primary: AppColors.accent,
+        onPrimary: Colors.white,
+        secondary: AppColors.sage,
+        surface: AppColors.card,
+        onSurface: AppColors.textPrimary,
       ),
       cardTheme: CardThemeData(
-        color: AppColors.surfaceCard,
+        color: AppColors.card,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: AppColors.surfaceBorder.withValues(alpha: 0.3)),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: AppColors.accentCyan,
-        foregroundColor: Colors.black,
-        elevation: 12,
-        shape: const CircleBorder(),
-      ),
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(
-          fontSize: 32, fontWeight: FontWeight.w800, color: AppColors.textWhite, letterSpacing: -1,
-        ),
-        headlineLarge: TextStyle(
-          fontSize: 26, fontWeight: FontWeight.w700, color: AppColors.textWhite, letterSpacing: -0.5,
-        ),
-        headlineMedium: TextStyle(
-          fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textWhite,
-        ),
-        bodyLarge: TextStyle(
-          fontSize: 16, color: AppColors.textWhite, height: 1.6,
-        ),
-        bodyMedium: TextStyle(
-          fontSize: 14, color: AppColors.textSoft, height: 1.5,
-        ),
-        labelLarge: TextStyle(
-          fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textWhite,
-        ),
-        labelSmall: TextStyle(
-          fontSize: 12, color: AppColors.textLabel,
+        backgroundColor: AppColors.accent,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: Colors.transparent,
-        selectedItemColor: AppColors.accentCyan,
-        unselectedItemColor: AppColors.textLabel,
+      dividerTheme: DividerThemeData(
+        thickness: 1,
+        color: AppColors.borderLight,
+      ),
+      dividerColor: AppColors.borderLight,
+      textTheme: TextTheme(
+        displayLarge: fraunces.copyWith(
+          fontSize: 32, fontWeight: FontWeight.w600, color: AppColors.textPrimary,
+        ),
+        headlineLarge: fraunces.copyWith(
+          fontSize: 24, fontWeight: FontWeight.w500, color: AppColors.textPrimary,
+        ),
+        headlineMedium: epilogue.copyWith(
+          fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary,
+        ),
+        bodyLarge: epilogue.copyWith(
+          fontSize: 16, color: AppColors.textPrimary, height: 1.6,
+        ),
+        bodyMedium: epilogue.copyWith(
+          fontSize: 14, color: AppColors.textSecondary, height: 1.5,
+        ),
+        labelLarge: epilogue.copyWith(
+          fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.textPrimary,
+        ),
+        labelSmall: epilogue.copyWith(
+          fontSize: 12, color: AppColors.textMuted,
+        ),
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: AppColors.card,
+        selectedItemColor: AppColors.accent,
+        unselectedItemColor: AppColors.textMuted,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.transparent,
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.surface,
         elevation: 0,
-        centerTitle: true,
-        titleTextStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textWhite),
+        centerTitle: false,
+        titleTextStyle: epilogue.copyWith(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+        iconTheme: IconThemeData(color: AppColors.textPrimary),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surfaceCard,
-        border: OutlineInputBorder(
+        fillColor: AppColors.cardLight,
+        enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: AppColors.surfaceBorder.withValues(alpha: 0.3)),
+          borderSide: BorderSide(color: AppColors.borderLight, width: 1),
         ),
-        hintStyle: const TextStyle(color: AppColors.textLabel),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(color: AppColors.accent, width: 1.5),
+        ),
+        hintStyle: TextStyle(color: AppColors.textMuted),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
     );
   }

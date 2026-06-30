@@ -17,7 +17,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.27.x
+          flutter-version: 3.29.x
 
       - name: Cache pub dependencies
         uses: actions/cache@v4
@@ -56,7 +56,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.27.x
+          flutter-version: 3.29.x
 
       - name: Install dependencies
         run: flutter pub get
@@ -64,12 +64,11 @@ jobs:
       - name: Generate code
         run: dart run build_runner build --delete-conflicting-outputs
 
-      - name: Scaffold Android platform
-        run: |
-          cd ..
-          flutter create --project-name xinji_app --platforms android tmp_scaffold
-          cp -r tmp_scaffold/android xinji-app/
-          rm -rf tmp_scaffold
+      - name: Analyze
+        run: flutter analyze --no-fatal-warnings --no-fatal-infos
+
+      - name: Set FLUTTER_ROOT for settings.gradle.kts
+        run: echo "FLUTTER_ROOT=$FLUTTER_HOME" >> $GITHUB_ENV
 
       - name: Build APK
         run: flutter build apk --debug

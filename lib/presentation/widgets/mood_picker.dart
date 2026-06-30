@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../../domain/model/mood_type.dart';
 
-class MoodPicker extends StatelessWidget {
+class MoodPicker extends StatefulWidget {
   final MoodType? selectedMood;
   final ValueChanged<MoodType> onMoodSelected;
 
@@ -13,70 +13,145 @@ class MoodPicker extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('此刻的心情', style: Theme.of(context).textTheme.labelSmall),
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: MoodType.values.map((mood) {
-            final isSelected = mood == selectedMood;
-            final moodColor = _moodColor(mood);
-            return GestureDetector(
-              onTap: () => onMoodSelected(mood),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.elasticOut,
-                width: isSelected ? 58 : 46,
-                height: isSelected ? 58 : 46,
-                decoration: BoxDecoration(
-                  color: isSelected ? moodColor.withValues(alpha: 0.12) : Colors.transparent,
-                  borderRadius: BorderRadius.circular(isSelected ? 18 : 14),
-                  border: isSelected
-                      ? Border.all(color: moodColor.withValues(alpha: 0.5), width: 1.5)
-                      : null,
-                  boxShadow: isSelected
-                      ? [BoxShadow(color: moodColor.withValues(alpha: 0.25), blurRadius: 14, spreadRadius: 2)]
-                      : null,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      mood.emoji,
-                      style: TextStyle(fontSize: isSelected ? 26 : 20),
-                    ),
-                    if (isSelected)
-                      Text(
-                        mood.label,
-                        style: TextStyle(
-                          fontSize: 9,
-                          color: moodColor,
-                          shadows: [
-                            Shadow(color: moodColor.withValues(alpha: 0.6), blurRadius: 8),
-                          ],
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    );
+  State<MoodPicker> createState() => _MoodPickerState();
+}
+
+class _MoodPickerState extends State<MoodPicker>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _pulseController;
+  MoodType? _hoveredMood;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2500),
+    )..repeat(reverse: true);
   }
 
-  Color _moodColor(MoodType mood) {
-    switch (mood) {
-      case MoodType.happy: return AppColors.moodHappy;
-      case MoodType.calm: return AppColors.moodCalm;
-      case MoodType.longing: return AppColors.moodLonging;
-      case MoodType.sad: return AppColors.moodSad;
-      case MoodType.anxious: return AppColors.moodAnxious;
-      case MoodType.hopeful: return AppColors.moodHopeful;
-    }
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _pulseController,
+      builder: (context, _) {
+        final pulse = _pulseController.value;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 4, bottom: 10),
+              child: Row(
+                children: [
+                  Text('此刻的心情',
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelSmall
+                          ?.copyWith(
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.5,
+                          )),
+                  const SizedBox(width: 8),
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: AppColors.accent
+                          .withValues(alpha: 0.3 + pulse * 0.3),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: MoodType.values.map((mood) {
+                final isSelected = mood == widget.selectedMood;
+                final isHovered = mood == _hoveredMood;
+                final mPulse = isSelected
+                    ? 1.0 + pulse * 0.06
+                    : 1.0;
+                final borderRadius = isSelected ? 20.0 : 16.0;
+
+                return Expanded(
+                  child: GestureDetector(
+                    onTap: () => widget.onMoodSelected(mood),
+                    onTapDown: (_) => setState(() => _hoveredMood = mood),
+                    onTapUp: (_) => setState(() => _hoveredMood = null),
+                    onTapCancel: () => setState(() => _hoveredMood = null),
+                    child: Transform.scale(
+                      scale: mPulse,
+                      alignment: Alignment.center,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOutCubic,
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? mood.color.withValues(alpha: 0.12)
+                                : (isHovered
+                                    ? AppColors.cardLight
+                                    : Colors.transparent),
+                            borderRadius: BorderRadius.circular(borderRadius),
+                            border: Border.all(
+                              color: isSelected
+                                  ? mood.color.withValues(alpha: 0.6)
+                                  : AppColors.borderLight,
+                              width: isSelected ? 1.5 : 1,
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Text(
+                                mood.emoji,
+                                style: TextStyle(
+                                  fontSize: isSelected ? 22 : 18,
+                                ),
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                mood.label,
+                                style: TextStyle(
+                                  fontSize: isSelected ? 10 : 9,
+                                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
+                                  color: isSelected ? mood.color : AppColors.textMuted,
+                                  fontFamily: 'Epilogue',
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (isSelected)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 2),
+                                  child: Container(
+                                    width: 4,
+                                    height: 4,
+                                    decoration: BoxDecoration(
+                                      color: mood.color,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

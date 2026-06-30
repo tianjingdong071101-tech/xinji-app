@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:xinji_app/domain/model/diary_entry.dart';
+import 'package:xinji_app/domain/model/essay_entry.dart';
 import 'package:xinji_app/domain/model/mood_type.dart';
 
 void main() {

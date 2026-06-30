@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:uuid/uuid.dart';
-import '../../domain/model/diary_entry.dart';
+import '../../domain/model/essay_entry.dart';
 import '../../domain/model/mood_type.dart';
-import '../../domain/repository/diary_repository.dart';
+import '../../domain/repository/essay_repository.dart';
 import '../database/app_database.dart' as db;
 
-part 'diary_repository_impl.g.dart';
+part 'essay_repository_impl.g.dart';
 
 @riverpod
 DiaryRepository diaryRepository(DiaryRepositoryRef ref) {
@@ -20,8 +19,11 @@ class DiaryRepositoryImpl implements DiaryRepository {
   DiaryRepositoryImpl(this._db);
 
   @override
-  Future<List<DiaryEntry>> getAllEntries() async {
-    final rows = await _db.select(_db.diaryEntries).get();
+  Future<List<DiaryEntry>> getAllEntries({int? limit, int? offset}) async {
+    final query = _db.select(_db.diaryEntries)
+      ..orderBy([(t) => OrderingTerm(expression: t.createdAt, mode: OrderingMode.desc)]);
+    if (limit != null) query.limit(limit, offset: offset);
+    final rows = await query.get();
     return rows.map(_toEntry).toList();
   }
 
@@ -40,7 +42,18 @@ class DiaryRepositoryImpl implements DiaryRepository {
     final rows = await (_db.select(_db.diaryEntries)
       ..where((t) => t.createdAt.isBetween(
         Constant(start.millisecondsSinceEpoch),
-        Constant(end.millisecondsSinceEpoch),
+        Constant(end.millisecondsSinceEpoch - 1),
+      )))
+        .get();
+    return rows.map(_toEntry).toList();
+  }
+
+  @override
+  Future<List<DiaryEntry>> getEntriesByDateRange(DateTime start, DateTime end) async {
+    final rows = await (_db.select(_db.diaryEntries)
+      ..where((t) => t.createdAt.isBetween(
+        Constant(start.millisecondsSinceEpoch),
+        Constant(end.millisecondsSinceEpoch - 1),
       )))
         .get();
     return rows.map(_toEntry).toList();
@@ -55,7 +68,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
   }
 
   @override
-  Future<List<DiaryEntry>> searchEntries(String query) async {
+  Future<List<DiaryEntry>> searchEntries(String query, {int? limit}) async {
     final pattern = '%$query%';
     final rows = await (_db.select(_db.diaryEntries)
       ..where((t) => t.content.like(pattern) | t.title.like(pattern)))
@@ -65,9 +78,7 @@ class DiaryRepositoryImpl implements DiaryRepository {
 
   @override
   Future<int> insertEntry(DiaryEntry entry) async {
-    final uuid = const Uuid().v4().hashCode;
-    final id = await _db.into(_db.diaryEntries).insert(db.DiaryEntriesCompanion(
-      id: Value<int>(entry.id > 0 ? entry.id : uuid.abs()),
+    return await _db.into(_db.diaryEntries).insert(db.DiaryEntriesCompanion(
       title: Value(entry.title),
       content: Value(entry.content),
       moodType: Value(entry.moodType.name),
@@ -78,7 +89,6 @@ class DiaryRepositoryImpl implements DiaryRepository {
       audioPath: Value(entry.audioPath),
       tags: Value(entry.tags.isNotEmpty ? jsonEncode(entry.tags) : null),
     ));
-    return id;
   }
 
   @override
@@ -103,24 +113,35 @@ class DiaryRepositoryImpl implements DiaryRepository {
 
   @override
   Future<int> getEntryCount() async {
-    return (await _db.select(_db.diaryEntries).get()).length;
+    final row = await (_db.selectOnly(_db.diaryEntries)
+      ..addColumns([_db.diaryEntries.id.count()])
+    ).getSingle();
+    return row.read(_db.diaryEntries.id.count()) ?? 0;
   }
 
   @override
   Future<int> getStreakCount() async {
-    final entries = await _db.select(_db.diaryEntries).get();
-    if (entries.isEmpty) return 0;
-    final dates = entries
-        .map((e) => DateTime.fromMillisecondsSinceEpoch(e.createdAt))
-        .map((d) => DateTime(d.year, d.month, d.day))
+    final rows = await (_db.selectOnly(_db.diaryEntries)
+      ..addColumns([_db.diaryEntries.createdAt])
+      ..orderBy([OrderingTerm(expression: _db.diaryEntries.createdAt, mode: OrderingMode.desc)])
+    ).get();
+    if (rows.isEmpty) return 0;
+    final dates = rows
+        .map((r) {
+          final ms = r.read(_db.diaryEntries.createdAt);
+          if (ms == null) return null;
+          final d = DateTime.fromMillisecondsSinceEpoch(ms);
+          return DateTime(d.year, d.month, d.day);
+        })
+        .nonNulls
         .toSet()
         .toList()
       ..sort((a, b) => b.compareTo(a));
     int streak = 0;
     final today = DateTime.now();
-    for (int i = 0; i < dates.length; i++) {
+    for (final date in dates) {
       final expected = today.subtract(Duration(days: streak));
-      if (dates[i].isAtSameMomentAs(expected)) {
+      if (date.isAtSameMomentAs(DateTime(expected.year, expected.month, expected.day))) {
         streak++;
       } else {
         break;

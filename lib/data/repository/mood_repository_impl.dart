@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/model/mood_type.dart';
+import '../../domain/model/mood_record.dart';
 import '../../domain/repository/mood_repository.dart';
 import '../database/app_database.dart' as db;
 
@@ -37,19 +38,23 @@ class MoodRepositoryImpl implements MoodRepository {
   Future<Map<MoodType, int>> getMoodDistribution(
     DateTime start, DateTime end,
   ) async {
-    final rows = await (_db.select(_db.moodRecords)
-      ..where((t) => t.date.isBetween(
+    final rows = await (_db.selectOnly(_db.moodRecords)
+      ..addColumns([_db.moodRecords.moodType, _db.moodRecords.id.count()])
+      ..where(_db.moodRecords.date.isBetween(
         Constant(start.millisecondsSinceEpoch),
         Constant(end.millisecondsSinceEpoch),
-      )))
-        .get();
+      ))
+      ..groupBy([_db.moodRecords.moodType])
+    ).get();
     final map = <MoodType, int>{};
     for (final mood in MoodType.values) {
       map[mood] = 0;
     }
     for (final row in rows) {
-      final mood = MoodType.values.firstWhere((m) => m.name == row.moodType);
-      map[mood] = (map[mood] ?? 0) + 1;
+      final mood = MoodType.values.firstWhere(
+        (m) => m.name == row.read(_db.moodRecords.moodType),
+      );
+      map[mood] = row.read(_db.moodRecords.id.count()) ?? 0;
     }
     return map;
   }

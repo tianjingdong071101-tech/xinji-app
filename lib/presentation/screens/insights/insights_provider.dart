@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../../data/repository/diary_repository_impl.dart';
+import '../../../data/repository/essay_repository_impl.dart';
 import '../../../data/repository/mood_repository_impl.dart';
 import '../../../domain/model/mood_type.dart';
 
