@@ -35,6 +35,7 @@ class _TodoBottomSheetState extends ConsumerState<TodoBottomSheet> {
     final titleCtl = TextEditingController();
     final descCtl = TextEditingController();
     var priority = TodoPriority.normal;
+    TimeOfDay? selectedTime;
 
     showDialog(
       context: context,
@@ -89,6 +90,59 @@ class _TodoBottomSheetState extends ConsumerState<TodoBottomSheet> {
                   ),
                 ],
               ),
+              SizedBox(height: 12),
+              GestureDetector(
+                onTap: () async {
+                  final t = await showTimePicker(
+                    context: ctx,
+                    initialTime: selectedTime ?? const TimeOfDay(hour: 18, minute: 0),
+                    builder: (context, child) => Theme(
+                      data: Theme.of(context).copyWith(
+                        colorScheme: ColorScheme.light(
+                          primary: AppColors.accent,
+                          onPrimary: Colors.white,
+                          surface: AppColors.card,
+                          onSurface: AppColors.textPrimary,
+                        ),
+                      ),
+                      child: child!,
+                    ),
+                  );
+                  if (t != null) setDialogState(() => selectedTime = t);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.cardLight,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.borderLight),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.access_time, size: 16, color: AppColors.accent),
+                      SizedBox(width: 8),
+                      Text(
+                        selectedTime != null
+                            ? '${selectedTime!.hour.toString().padLeft(2, '0')}:${selectedTime!.minute.toString().padLeft(2, '0')}'
+                            : '添加时间（可选）',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: selectedTime != null
+                              ? AppColors.textPrimary
+                              : AppColors.textMuted,
+                        ),
+                      ),
+                      if (selectedTime != null) ...[
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () => setDialogState(() => selectedTime = null),
+                          child: Icon(Icons.close, size: 14, color: AppColors.textMuted),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           actions: [
@@ -110,6 +164,9 @@ class _TodoBottomSheetState extends ConsumerState<TodoBottomSheet> {
                   completed: false,
                   priority: priority,
                   date: widget.date,
+                  todoTimeMinutes: selectedTime != null
+                      ? selectedTime!.hour * 60 + selectedTime!.minute
+                      : null,
                   createdAt: DateTime.now(),
                 ));
                 if (!ctx.mounted) return;
@@ -129,6 +186,9 @@ class _TodoBottomSheetState extends ConsumerState<TodoBottomSheet> {
     final titleCtl = TextEditingController(text: item.title);
     final descCtl = TextEditingController(text: item.description ?? '');
     var priority = item.priority;
+    TimeOfDay? selectedTime = item.todoTimeMinutes != null
+        ? TimeOfDay(hour: item.timeHour, minute: item.timeMinute)
+        : null;
 
     showDialog(
       context: context,
@@ -182,6 +242,59 @@ class _TodoBottomSheetState extends ConsumerState<TodoBottomSheet> {
                   ),
                 ],
               ),
+              SizedBox(height: 12),
+              GestureDetector(
+                onTap: () async {
+                  final t = await showTimePicker(
+                    context: ctx,
+                    initialTime: selectedTime ?? const TimeOfDay(hour: 18, minute: 0),
+                    builder: (context, child) => Theme(
+                      data: Theme.of(context).copyWith(
+                        colorScheme: ColorScheme.light(
+                          primary: AppColors.accent,
+                          onPrimary: Colors.white,
+                          surface: AppColors.card,
+                          onSurface: AppColors.textPrimary,
+                        ),
+                      ),
+                      child: child!,
+                    ),
+                  );
+                  if (t != null) setDialogState(() => selectedTime = t);
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: AppColors.cardLight,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.borderLight),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.access_time, size: 16, color: AppColors.accent),
+                      SizedBox(width: 8),
+                      Text(
+                        selectedTime != null
+                            ? '${selectedTime!.hour.toString().padLeft(2, '0')}:${selectedTime!.minute.toString().padLeft(2, '0')}'
+                            : '添加时间（可选）',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: selectedTime != null
+                              ? AppColors.textPrimary
+                              : AppColors.textMuted,
+                        ),
+                      ),
+                      if (selectedTime != null) ...[
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () => setDialogState(() => selectedTime = null),
+                          child: Icon(Icons.close, size: 14, color: AppColors.textMuted),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
           actions: [
@@ -200,6 +313,9 @@ class _TodoBottomSheetState extends ConsumerState<TodoBottomSheet> {
                       ? null
                       : descCtl.text.trim(),
                   priority: priority,
+                  todoTimeMinutes: selectedTime != null
+                      ? selectedTime!.hour * 60 + selectedTime!.minute
+                      : null,
                 ));
                 if (!ctx.mounted) return;
                 Navigator.of(ctx).pop();
@@ -407,7 +523,7 @@ class _TodoTile extends StatelessWidget {
                     : null,
               ),
             ),
-            SizedBox(width: 12),
+              SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,6 +546,32 @@ class _TodoTile extends StatelessWidget {
                                 color: AppColors.moodAnxious,
                                 fontWeight: FontWeight.w600,
                               )),
+                        ),
+                      if (item.todoTimeMinutes != null)
+                        Container(
+                          margin: EdgeInsets.only(right: 6),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 1),
+                          decoration: BoxDecoration(
+                            color: AppColors.accent
+                                .withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.access_time, size: 10, color: AppColors.accent),
+                              SizedBox(width: 2),
+                              Text(
+                                item.timeString,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: AppColors.accent,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       Expanded(
                         child: Text(

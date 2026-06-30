@@ -50,6 +50,7 @@ class Todos extends Table {
   IntColumn get date => integer()();
   TextColumn get recurring =>
       text().withDefault(const Constant('none'))();
+  IntColumn get todoTime => integer().nullable()();
   IntColumn get createdAt => integer()();
 
   @override

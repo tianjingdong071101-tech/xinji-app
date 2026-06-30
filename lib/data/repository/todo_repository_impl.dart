@@ -50,7 +50,10 @@ class TodoRepositoryImpl implements TodoRepository {
           completed: Value(todo.completed ? 1 : 0),
           priority: Value(todo.priority.name),
           recurring: Value(todo.recurring.name),
-          date: Value(todo.date.millisecondsSinceEpoch),
+           todoTime: todo.todoTimeMinutes != null
+               ? Value(todo.todoTimeMinutes)
+               : const Value.absent(),
+           date: Value(todo.date.millisecondsSinceEpoch),
           createdAt: Value(todo.createdAt.millisecondsSinceEpoch),
         ));
   }
@@ -64,6 +67,9 @@ class TodoRepositoryImpl implements TodoRepository {
       completed: Value(todo.completed ? 1 : 0),
       priority: Value(todo.priority.name),
       recurring: Value(todo.recurring.name),
+      todoTime: todo.todoTimeMinutes != null
+          ? Value(todo.todoTimeMinutes)
+          : const Value.absent(),
     ));
   }
 
@@ -116,6 +122,7 @@ class TodoRepositoryImpl implements TodoRepository {
       priority: TodoPriority.values.firstWhere((p) => p.name == row.priority),
       recurring: TodoRecurring.values.firstWhere((r) => r.name == row.recurring),
       date: DateTime.fromMillisecondsSinceEpoch(row.date),
+      todoTimeMinutes: row.todoTime,
       createdAt: DateTime.fromMillisecondsSinceEpoch(row.createdAt),
     );
   }
